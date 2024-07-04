@@ -1,22 +1,19 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.19;
 
 import { Script, console2 } from "forge-std/Script.sol";
-import { Counter } from "../src/Counter.sol";
-
-interface ImmutableCreate2Factory {
-  function create2(bytes32 salt, bytes calldata initializationCode)
-    external
-    payable
-    returns (address deploymentAddress);
-}
+import { HatsFarcasterBundler, IHats } from "../src/HatsFarcasterBundler.sol";
 
 contract Deploy is Script {
-  Counter public counter;
-  bytes32 public SALT = bytes32(abi.encode("lets add some salt to these eggs"));
+  HatsFarcasterBundler public bundler;
+  bytes32 public SALT = bytes32(abi.encode(0x4a57));
 
   // default values
   bool internal _verbose = true;
+  string internal _version = "0.1.0";
+  IHats internal _hats = IHats(0x3bc1A0Ad72417f2d411118085256fC53CBdDd137);
+  HatsFarcasterBundler.Hat[] internal _hatTreeTemplate;
+  HatsFarcasterBundler.FarcasterContracts internal _farcasterContracts;
 
   /// @dev Override default values, if desired
   function prepare(bool verbose) public {
@@ -31,7 +28,7 @@ contract Deploy is Script {
 
   function _log(string memory prefix) internal view {
     if (_verbose) {
-      console2.log(string.concat(prefix, "Counter:"), address(counter));
+      console2.log(string.concat(prefix, "HatsFarcasterBundler:"), address(bundler));
     }
   }
 
@@ -47,29 +44,11 @@ contract Deploy is Script {
      *       never differs regardless of where its being compiled
      *    2. The provided salt, `SALT`
      */
-    counter = new Counter{ salt: SALT}(/* insert constructor args here */);
+    bundler = new HatsFarcasterBundler{ salt: SALT }(_version, _hats, _hatTreeTemplate, _farcasterContracts);
 
     vm.stopBroadcast();
 
     _log("");
-  }
-}
-
-/// @dev Deploy pre-compiled ir-optimized bytecode to a non-deterministic address
-contract DeployPrecompiled is Deploy {
-  /// @dev Update SALT and default values in Deploy contract
-
-  function run() public override {
-    vm.startBroadcast(deployer());
-
-    bytes memory args = abi.encode( /* insert constructor args here */ );
-
-    /// @dev Load and deploy pre-compiled ir-optimized bytecode.
-    counter = Counter(deployCode("optimized-out/Counter.sol/Counter.json", args));
-
-    vm.stopBroadcast();
-
-    _log("Precompiled ");
   }
 }
 

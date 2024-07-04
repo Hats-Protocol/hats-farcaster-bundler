@@ -1,4 +1,12 @@
 [submodule "lib/forge-std"]
 	path = lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
-
+[submodule "lib/hats-protocol"]
+	path = lib/hats-protocol
+	url = https://github.com/hats-protocol/hats-protocol
+[submodule "lib/farcaster-delegator"]
+	path = lib/farcaster-delegator
+	url = https://github.com/hats-protocol/farcaster-delegator
+[submodule "lib/hats-module"]
+	path = lib/hats-module
+	url = https://github.com/hats-protocol/hats-module

@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.21;
 
 import { Test, console2 } from "forge-std/Test.sol";
-import { Counter } from "../src/Counter.sol";
-import { Deploy, DeployPrecompiled } from "../script/Counter.s.sol";
+import { HatsFarcasterBundler } from "../src/HatsFarcasterBundler.sol";
+import { Deploy } from "../script/Deploy.s.sol";
 
-contract CounterTest is Deploy, Test {
+contract HatsFarcasterBundlerTest is Deploy, Test {
   /// @dev Inherit from DeployPrecompiled instead of Deploy if working with pre-compiled contracts
 
   /// @dev variables inhereted from Deploy script
-  // Counter public counter;
+  // HatsFarcasterBundler public bundler;
   // bytes32 public SALT;
 
   uint256 public fork;
@@ -25,8 +25,4 @@ contract CounterTest is Deploy, Test {
   }
 }
 
-contract UnitTests is CounterTest {
-  function test_empty() public {
-    counter.setNumber(2);
-  }
-}
+contract UnitTests is HatsFarcasterBundlerTest { }
