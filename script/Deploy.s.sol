@@ -2,7 +2,9 @@
 pragma solidity ^0.8.19;
 
 import { Script, console2 } from "forge-std/Script.sol";
-import { HatsFarcasterBundler, IHats } from "../src/HatsFarcasterBundler.sol";
+import {
+  HatsFarcasterBundler, IHats, HatTemplate, FarcasterContracts, HatMintData
+} from "../src/HatsFarcasterBundler.sol";
 
 contract Deploy is Script {
   HatsFarcasterBundler public bundler;
@@ -12,12 +14,81 @@ contract Deploy is Script {
   bool internal _verbose = true;
   string internal _version = "0.1.0";
   IHats internal _hats = IHats(0x3bc1A0Ad72417f2d411118085256fC53CBdDd137);
-  HatsFarcasterBundler.Hat[] internal _hatTreeTemplate;
-  HatsFarcasterBundler.FarcasterContracts internal _farcasterContracts;
+  HatTemplate internal _topHatTemplate;
+  HatTemplate internal _autonomousAdminHatTemplate;
+  HatTemplate internal _adminHatTemplate;
+  HatTemplate internal _casterHatTemplate;
+  FarcasterContracts internal _farcasterContracts;
+
+  function _setFarcasterContracts() internal {
+    _farcasterContracts = FarcasterContracts({
+      IdGateway: 0x00000000Fc25870C6eD6b6c7E41Fb078b7656f69,
+      idRegistry: 0x00000000Fc6c5F01Fc30151999387Bb99A9f489b,
+      keyGateway: 0x00000000Fc25870C6eD6b6c7E41Fb078b7656f69,
+      keyRegistry: 0x00000000Fc1237824fb747aBDE0FF18990E59b7e,
+      signedKeyRequestValidator: 0x00000000FC700472606ED4fA22623Acf62c60553
+    });
+  }
 
   /// @dev Override default values, if desired
-  function prepare(bool verbose) public {
+  function prepare(bool verbose, string memory version, IHats hats, HatTemplate[] memory treeTemplate) public {
     _verbose = verbose;
+    _version = version;
+    _hats = hats;
+
+    _topHatTemplate = treeTemplate[0];
+    _autonomousAdminHatTemplate = treeTemplate[1];
+    _adminHatTemplate = treeTemplate[2];
+    _casterHatTemplate = treeTemplate[3];
+
+    _setFarcasterContracts();
+  }
+
+  function _createTreeTemplate() internal pure virtual returns (HatTemplate[] memory treeTemplate) {
+    // module placeholder address
+    address modulePlaceholder = 0x0000000000000000000000000000000000004a57;
+
+    treeTemplate = new HatTemplate[](4);
+
+    // top hat
+    treeTemplate[0] = HatTemplate({
+      eligibility: address(0),
+      maxSupply: 0,
+      toggle: address(0),
+      mutable_: false,
+      details: "top hat details",
+      imageURI: "top hat image"
+    });
+
+    // autonomous admin
+    treeTemplate[1] = HatTemplate({
+      eligibility: modulePlaceholder,
+      maxSupply: 1,
+      toggle: modulePlaceholder,
+      mutable_: true,
+      details: "autonomous admin details",
+      imageURI: "autonomous admin image"
+    });
+
+    // admin hat
+    treeTemplate[2] = HatTemplate({
+      eligibility: modulePlaceholder,
+      maxSupply: 5,
+      toggle: modulePlaceholder,
+      mutable_: true,
+      details: "admin details",
+      imageURI: "admin image"
+    });
+
+    // caster hat
+    treeTemplate[3] = HatTemplate({
+      eligibility: modulePlaceholder,
+      maxSupply: 1000,
+      toggle: modulePlaceholder, // will be overriden by the first admin
+      mutable_: true,
+      details: "caster details",
+      imageURI: "caster image"
+    });
   }
 
   /// @dev Set up the deployer via their private key from the environment
@@ -36,6 +107,21 @@ contract Deploy is Script {
   function run() public virtual {
     vm.startBroadcast(deployer());
 
+    // set the hat tree template
+    HatTemplate[] memory treeTemplate;
+
+    if (_autonomousAdminHatTemplate.eligibility == address(0)) {
+      // if the templates are not provided, create them
+      treeTemplate = _createTreeTemplate();
+    } else {
+      // otherwise, use the
+      treeTemplate = new HatTemplate[](4);
+      treeTemplate[0] = _topHatTemplate;
+      treeTemplate[1] = _autonomousAdminHatTemplate;
+      treeTemplate[2] = _adminHatTemplate;
+      treeTemplate[3] = _casterHatTemplate;
+    }
+
     /**
      * @dev Deploy the contract to a deterministic address via forge's create2 deployer factory, which is at this
      * address on all chains: `0x4e59b44847b379578588920cA78FbF26c0B4956C`.
@@ -44,7 +130,7 @@ contract Deploy is Script {
      *       never differs regardless of where its being compiled
      *    2. The provided salt, `SALT`
      */
-    bundler = new HatsFarcasterBundler{ salt: SALT }(_version, _hats, _hatTreeTemplate, _farcasterContracts);
+    bundler = new HatsFarcasterBundler{ salt: SALT }(_version, _hats, treeTemplate, _farcasterContracts);
 
     vm.stopBroadcast();
 

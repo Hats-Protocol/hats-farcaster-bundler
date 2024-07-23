@@ -19,6 +19,11 @@ remappings = [
 # Enable tests to read ir-optimized bytecode precompiled by profile.optimized
 fs_permissions = [{ access = "read", path = "./optimized-out" }]
 
+[profile.default.fuzz]
+seed = "0x0101010101010101010101010101010101010101010101010101010101010101"
+
+
+
 # for pre-compiling ir-optimized bytecode that will be later deployed by tests
 [profile.optimized]
 via_ir = true
