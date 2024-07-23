@@ -48,7 +48,6 @@ struct HatTemplate {
 When using this contract to deploy a new tree, the `eligibility` module for the caster hat will always be set as the first address in the `admins` array, overriding the template if necessary.
 >
 
-
 ## Development
 
 This repo uses Foundry for development and testing. To get started:
