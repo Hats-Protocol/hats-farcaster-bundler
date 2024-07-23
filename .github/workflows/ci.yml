@@ -7,7 +7,7 @@ on:
   pull_request:
 
 env:
-  FOUNDRY_PROFILE: ci
+  FOUNDRY_PROFILE: default
   INFURA_KEY: ${{ secrets.INFURA_KEY }}
   ALCHEMY_KEY: ${{ secrets.ALCHEMY_KEY }}
   GC_RPC: ${{ secrets.GC_RPC }}
@@ -49,6 +49,10 @@ jobs:
 
       - name: Run tests
         run: forge test -vvv
+        env:
+          # make fuzzing semi-deterministic to avoid noisy gas cost estimation
+          # due to non-deterministic fuzzing (but still use pseudo-random fuzzing seeds)
+          FOUNDRY_FUZZ_SEED: 0x${{ github.event.pull_request.base.sha || github.sha }}
 
   # coverage:
   #   name: "Test coverage"
