@@ -24,7 +24,7 @@ contract Deploy is Script {
     _farcasterContracts = FarcasterContracts({
       IdGateway: 0x00000000Fc25870C6eD6b6c7E41Fb078b7656f69,
       idRegistry: 0x00000000Fc6c5F01Fc30151999387Bb99A9f489b,
-      keyGateway: 0x00000000Fc25870C6eD6b6c7E41Fb078b7656f69,
+      keyGateway: 0x00000000fC56947c7E7183f8Ca4B62398CaAdf0B,
       keyRegistry: 0x00000000Fc1237824fb747aBDE0FF18990E59b7e,
       signedKeyRequestValidator: 0x00000000FC700472606ED4fA22623Acf62c60553
     });
@@ -56,8 +56,8 @@ contract Deploy is Script {
       maxSupply: 0,
       toggle: address(0),
       mutable_: false,
-      details: "top hat details",
-      imageURI: "top hat image"
+      details: "ipfs://bafkreigi7amzxywtped6uz5spo73n7zolxtymxeaqnwmizryv3mp46v63e",
+      imageURI: "ipfs://bafkreiflezpk3kjz6zsv23pbvowtatnd5hmqfkdro33x5mh2azlhne3ah4"
     });
 
     // autonomous admin
@@ -66,8 +66,8 @@ contract Deploy is Script {
       maxSupply: 1,
       toggle: modulePlaceholder,
       mutable_: true,
-      details: "autonomous admin details",
-      imageURI: "autonomous admin image"
+      details: "ipfs://bafkreihe2rxghtnomgaxs5fv2suxog6bdxkgxxifik7z6gtu65mi3oycue",
+      imageURI: "ipfs://bafkreiflezpk3kjz6zsv23pbvowtatnd5hmqfkdro33x5mh2azlhne3ah4"
     });
 
     // admin hat
@@ -76,8 +76,8 @@ contract Deploy is Script {
       maxSupply: 5,
       toggle: modulePlaceholder,
       mutable_: true,
-      details: "admin details",
-      imageURI: "admin image"
+      details: "ipfs://bafkreiax5tjyhestv5op33cje6yrhsaylnblu7t6tl7w25qmhl4cojpap4",
+      imageURI: "ipfs://bafkreiflezpk3kjz6zsv23pbvowtatnd5hmqfkdro33x5mh2azlhne3ah4"
     });
 
     // caster hat
@@ -86,8 +86,8 @@ contract Deploy is Script {
       maxSupply: 1000,
       toggle: modulePlaceholder, // will be overriden by the first admin
       mutable_: true,
-      details: "caster details",
-      imageURI: "caster image"
+      details: "ipfs://bafkreig325iyeqwpzigo4anb2qjzux5lu4gww4ewna23pbtluys52pmtcy",
+      imageURI: "ipfs://bafkreiflezpk3kjz6zsv23pbvowtatnd5hmqfkdro33x5mh2azlhne3ah4"
     });
   }
 
@@ -121,6 +121,8 @@ contract Deploy is Script {
       treeTemplate[2] = _adminHatTemplate;
       treeTemplate[3] = _casterHatTemplate;
     }
+
+    _setFarcasterContracts();
 
     /**
      * @dev Deploy the contract to a deterministic address via forge's create2 deployer factory, which is at this
