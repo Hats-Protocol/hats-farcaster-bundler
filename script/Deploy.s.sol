@@ -67,7 +67,7 @@ contract Deploy is Script {
       toggle: modulePlaceholder,
       mutable_: true,
       details: "ipfs://bafkreihe2rxghtnomgaxs5fv2suxog6bdxkgxxifik7z6gtu65mi3oycue",
-      imageURI: "ipfs://bafkreiflezpk3kjz6zsv23pbvowtatnd5hmqfkdro33x5mh2azlhne3ah4"
+      imageURI: ""
     });
 
     // admin hat
@@ -77,7 +77,7 @@ contract Deploy is Script {
       toggle: modulePlaceholder,
       mutable_: true,
       details: "ipfs://bafkreiax5tjyhestv5op33cje6yrhsaylnblu7t6tl7w25qmhl4cojpap4",
-      imageURI: "ipfs://bafkreiflezpk3kjz6zsv23pbvowtatnd5hmqfkdro33x5mh2azlhne3ah4"
+      imageURI: ""
     });
 
     // caster hat
@@ -87,7 +87,7 @@ contract Deploy is Script {
       toggle: modulePlaceholder, // will be overriden by the first admin
       mutable_: true,
       details: "ipfs://bafkreig325iyeqwpzigo4anb2qjzux5lu4gww4ewna23pbtluys52pmtcy",
-      imageURI: "ipfs://bafkreiflezpk3kjz6zsv23pbvowtatnd5hmqfkdro33x5mh2azlhne3ah4"
+      imageURI: ""
     });
   }
 
