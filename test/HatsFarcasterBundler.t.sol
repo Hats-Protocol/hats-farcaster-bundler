@@ -25,7 +25,7 @@ contract HatsFarcasterBundlerTest is Deploy, Test {
   FarcasterContracts public farcasterContracts = FarcasterContracts({
     IdGateway: 0x00000000Fc25870C6eD6b6c7E41Fb078b7656f69,
     idRegistry: 0x00000000Fc6c5F01Fc30151999387Bb99A9f489b,
-    keyGateway: 0x00000000Fc25870C6eD6b6c7E41Fb078b7656f69,
+    keyGateway: 0x00000000fC56947c7E7183f8Ca4B62398CaAdf0B,
     keyRegistry: 0x00000000Fc1237824fb747aBDE0FF18990E59b7e,
     signedKeyRequestValidator: 0x00000000FC700472606ED4fA22623Acf62c60553
   });
